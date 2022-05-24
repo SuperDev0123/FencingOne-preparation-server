@@ -1,0 +1,32 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "cheerio": "^1.0.0-rc.10",
+    "csv-parse": "^5.0.4",
+    "csv-parser": "^3.0.0",
+    "csv-stream": "^0.2.0",
+    "fast-csv": "^4.3.6",
+    "https": "^1.0.0",
+    "https-proxy-agent": "^5.0.1",
+    "moment": "^2.29.3",
+    "mysql": "^2.18.1",
+    "node-csv": "^0.1.2",
+    "node-fetch": "^3.2.3",
+    "node-schedule": "^2.1.0",
+    "pdf-parse": "^1.1.1",
+    "pdfreader": "^1.4.0",
+    "random-words": "^1.1.2",
+    "request": "^2.88.2"
+  }
+}
