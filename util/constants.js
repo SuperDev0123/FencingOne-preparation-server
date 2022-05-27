@@ -1,2 +1,5 @@
 exports.nationalYoungGrade = ['ME', 'MF', 'MS', 'WE', 'WF', 'WS']
 exports.nationalYoungAge = ['Y10', 'Y12', 'Y14']
+exports.weapons = ['Foil', 'Epee', 'Saber']
+exports.classes = ['A', 'B', 'C', 'D', 'E', 'U']
+exports.ages = ['Y10', 'Y12', 'Y14', 'CDT', 'JNR', 'D1A', 'DV1', 'DV2', 'DV2', 'V40', 'V50', 'V60', 'V70', 'V80']

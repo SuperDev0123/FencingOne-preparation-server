@@ -98,6 +98,16 @@ exports.convertEventType = (val) => {
   return returnVal
 }
 
+
+exports.getFencerYear = (birthDate) => {
+  const today = new Date()
+  birthDate = new Date(birthDate)
+  if (today.getMonth() >= 8) {
+    return today.getFullYear() - birthDate.getFullYear();
+  }
+  return today.getFullYear() - birthDate.getFullYear() - 1
+}
+
 exports.isToday = (someDate) => {
   const today = new Date()
   return someDate.getDate() == today.getDate() &&
@@ -138,15 +148,16 @@ const setMonthlySchedule = (callback) => {
   });
 }
 
-exports.setLiveSchedule = async (callback) => {
-  if (dbmanager.checkScrapStatus('member') && await dbmanager.checkScrapStatus('club') && await dbmanager.checkScrapStatus('tournament')) {
-    await callback();
-  }
-  setTimeout(() => {
-    this.setLiveSchedule(callback)
-  }, 1000 * 60 * 1);
+const setLiveSchedule = async (callback) => {
+  await callback();
+  let now = new Date();
+  now.setMinutes(now.getMinutes() + 1)
+  const job = schedule.scheduleJob(now, async function () {
+    setLiveSchedule(callback);
+  });
 }
 
 exports.setDailySchedule = setDailySchedule;
 exports.setWeeklySchedule = setWeeklySchedule;
 exports.setMonthlySchedule = setMonthlySchedule;
+exports.setLiveSchedule = setLiveSchedule;
