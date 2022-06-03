@@ -1,6 +1,15 @@
 const mysql = require('mysql');
 const { logger } = require('../logger');
 
+// var con = mysql.createPool({
+//   connectionLimit: 10,
+//   host: "localhost",
+//   user: "root",
+//   password: "root",
+//   database: "01_web_scrapping",
+//   multipleStatements: true,
+// });
+
 var con = mysql.createPool({
   connectionLimit: 10,
   host: "localhost",
@@ -9,7 +18,6 @@ var con = mysql.createPool({
   database: "01_web_scrapping",
   multipleStatements: true,
 });
-
 
 // con.connect(function (err) {
 //   if (err) {

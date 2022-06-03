@@ -40,7 +40,7 @@ var point_update = 0;
 async function updateClubTournamentEvent() {
   return new Promise(async (resolve, reject) => {
     logger('start update club tournament & event')
-    const tournamentList = await dbmanager.runQuery(`Select * from tournament_list where season >= ?`, [this_season])
+    const tournamentList = await dbmanager.runQuery(`Select * from tournament_list where is_live_data = 1 and season >= ? and DATEDIFF(NOW(), tournament_end) <= 0`, [this_season])
     // const clubList = await dbmanager.runQuery(`Select * from club_list`)
     for (let i = 0; i < tournamentList.length; i++) {
       const tournamentData = tournamentList[i];
@@ -122,7 +122,7 @@ async function updateClubGradeList() {
         let gradeData = {}
         for (let j = 0; j < weapons.length; j++) {
           for (let k = 0; k < classes.length; k++) {
-            const result = await dbmanager.runQuery(`select id, first_name, last_name, middle_name, birth_date from member_list where LOCATE(${weapons[j].toLowerCase()}, '${classes[k]}') > 0 AND (club_one_id = ? OR club_two_id = ?)`, [clubData.id, clubData.id]);
+            const result = await dbmanager.runQuery(`select id, first_name, last_name, middle_name, birth_date from member_list where LOCATE('${classes[k]}', ${weapons[j].toLowerCase()}) > 0 AND (club_one_id = ? OR club_two_id = ?)`, [clubData.id, clubData.id]);
             gradeData[`${weapons[j]}-${classes[k]}`] = result.map(e => {
               return { id: e.id, name: `${e.first_name} ${e.last_name}${e.middle_name ? ` , ${e.middle_name}` : ''}`, birthDate: e.birth_date }
             })
@@ -209,7 +209,7 @@ async function updateTournamentNotification() {
     const isUpdated = await dbmanager.runQuery(`Select count(*) count_num from notification_list where DATEDIFF(alert_time, NOW()) = 0 and type = 'tournament'`)
     if (isUpdated && isUpdated[0].count_num == 0) {
       logger('start update Tournament notification')
-      const tournamentList = await dbmanager.runQuery(`SELECT * FROM tournament_list WHERE DATEDIFF(registration_open, NOW()) = 0 OR DATEDIFF(entry_deadline, NOW()) = 0 OR DATEDIFF(late_entry_deadline, NOW()) = 0 OR DATEDIFF(tournament_start, NOW()) = 0 OR DATEDIFF(tournament_end, NOW()) = 0`)
+      const tournamentList = await dbmanager.runQuery(`SELECT * FROM tournament_list WHERE is_live_data = 1 and DATEDIFF(registration_open, NOW()) = 0 OR DATEDIFF(entry_deadline, NOW()) = 0 OR DATEDIFF(late_entry_deadline, NOW()) = 0 OR DATEDIFF(tournament_start, NOW()) = 0 OR DATEDIFF(tournament_end, NOW()) = 0`)
       for (let i = 0; i < tournamentList.length; i++) {
         const tournamentData = tournamentList[i];
         logger(`check tournament ${tournamentData.name}`)
@@ -266,7 +266,7 @@ async function startPreparation() {
   await updateClubGradeList();
   await updateEligibleList();
   await updateTournamentNotification();
-  await updateClubTournamentEvent();
+  // await updateClubTournamentEvent();
 }
 
 async function checkUpdateStatus() {
@@ -294,7 +294,6 @@ async function init() {
     await startPreparation();
     await resetUpdateStatus();
   })
-  const weather_api_key = '440fa1eb70dae46c299bb22bb47c024c'
 }
 
 init();
